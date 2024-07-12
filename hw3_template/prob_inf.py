@@ -21,11 +21,11 @@ def calc_global_joint_prob(model, variableValues):
   
   # YOUR CODE HERE
   #
-  # You may assume variableValues is complete, i.e containes all variables in the model
+  # You may assume variableValues is complete, i.e contains all variables in the model
   #   Thus, no marginalization is necessary
   # All you need to do is factorize the model, as shown in the example on slides 15-16
   #
-  # You can find a complete descrition of the model object in the documentation of
+  # You can find a complete description of the model object in the documentation of
   #   the read_model_file() function, BUT
   # All you will need is the list of variables: model.vars
   #
@@ -35,7 +35,14 @@ def calc_global_joint_prob(model, variableValues):
   # Hint: Don't forget that you need to handle the fact that variables can have both True and False values!
   #
   # (Reference solution is 7 lines of code.)
-  raise NotImplementedError() #DELETE AND ADD YOUR CODE
+  cond_prob = 1
+  for var_name in model.vars:
+    if variableValues[var_name] != True:
+      cond_prob *= 1 - read_cpt(model, var_name, variableValues)
+    else:
+      cond_prob *= read_cpt(model, var_name, variableValues)
+  
+  return cond_prob
 
 def calc_query_exact_brute(model, queryVar, queryVal, evidence):
   """
