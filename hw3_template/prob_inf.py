@@ -79,6 +79,9 @@ def calc_query_exact_brute(model, queryVar, queryVal, evidence):
      
   pr_QE=0 #Accumulate probabilities for Query and Evidence
   pr_E=0  #Accumulate probabilities for just Evidence
+  Q_and_E_dict = evidence.copy()              # combines evidence with query so we can use it 
+  Q_and_E_dict.update({queryVar : queryVal})  # like P(Q,E)
+
   #Generate table by looping over every possible combination of variables
   for jptEntry in truefalse_combination_iterator(model.vars):
     #Get joint probability for this combination of variables
@@ -98,7 +101,11 @@ def calc_query_exact_brute(model, queryVar, queryVal, evidence):
     # Hint: You would find a dictionary "is subset" operation very useful in solving this problem
     #
     # (Reference solution is 4 lines of code.)
-    raise NotImplementedError() #DELETE AND ADD YOUR CODE
+
+    if dict_issubset(jptEntry,evidence):
+      pr_E += pr_entry
+    if dict_issubset(jptEntry, Q_and_E_dict):
+      pr_QE += pr_entry
 
   #Definition of coditional probability
   return pr_QE/pr_E
