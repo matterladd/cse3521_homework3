@@ -107,7 +107,7 @@ def calc_query_exact_brute(model, queryVar, queryVal, evidence):
     if dict_issubset(jptEntry, Q_and_E_dict):
       pr_QE += pr_entry
 
-  #Definition of coditional probability
+  #Definition of conditional probability
   return pr_QE/pr_E
 
 def calc_query_exact_tree(model, queryVar, queryVal, evidence):
@@ -163,7 +163,10 @@ def calc_query_exact_tree(model, queryVar, queryVal, evidence):
   # Refer to the example on slide 30.
   #
   # (Reference solution is 3 lines of code.)
-  raise NotImplementedError() #DELETE AND ADD YOUR CODE
+  if queryVal:
+    return prQ_T / (prQ_T + prQ_F)
+  else:
+    return prQ_F / (prQ_T + prQ_F)
 
 def recurse_calc_query_exact_tree(model, queryVar, evidence, variableValues, remainingCalc):
   """
@@ -271,7 +274,8 @@ def recurse_calc_query_exact_tree(model, queryVar, evidence, variableValues, rem
       # Slide 28 shows examples of dealing with terms that *do not* reference the query variable.
       #
       # (Reference solution is 5 lines of code.)
-      raise NotImplementedError() #DELETE AND ADD YOUR CODE
+      prQ_T *= calc_query_exact_brute(model, var, True, evidence)
+      prQ_F *= calc_query_exact_brute(model, var, False, evidence)
 
     if len(remainingCalc)>1:
       #If there are still terms left, then recurse
@@ -284,7 +288,8 @@ def recurse_calc_query_exact_tree(model, queryVar, evidence, variableValues, rem
       # How do you combine _factors_ together?
       #
       # (Reference solution is 2 lines of code.)
-      raise NotImplementedError() #DELETE AND ADD YOUR CODE
+      prQ_T *= recurse_prQ_T
+      prQ_F *= recurse_prQ_F
 
   return prQ_T, prQ_F #Return (relative) probability that query is True vs False
   
